@@ -11,3 +11,4 @@ Some features are:
 3. viewing multiple images
 4. clicking a pixel in the image generates a graph of spectral responses at that location
 5. scalable, fast, simple
+6. shareable static URLs linking to a specific view of any image
