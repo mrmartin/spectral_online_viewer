@@ -1,0 +1,13 @@
+[Unit]
+Description=Read and present hyperspectral images interactively
+After=network.target
+
+[Service]
+User=kolarmartin
+Group=www-data
+WorkingDirectory=/home/kolarmartin/
+Environment="PATH=/home/kolarmartin/anaconda3"
+ExecStart=/home/kolarmartin/anaconda3/bin/gunicorn --workers 3 --bind unix:banany.sock -m 007 wsgi2:app
+
+[Install]
+WantedBy=multi-user.target

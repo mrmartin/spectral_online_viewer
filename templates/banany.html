@@ -1,0 +1,186 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Spectral Lab - Banana timelapse interactive viewer</title>
+
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="/assets/ionicons-2.0.1/css/ionicons.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css"/>
+		<link href="https://fonts.googleapis.com/css?family=Istok+Web" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700" rel="stylesheet">
+
+		<link rel="stylesheet" type="text/css" href="/assets/css/main.css">
+	</head>
+
+	<body>
+		<section class="head">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<header class="header">
+							<div class="inner">
+								<!-- Logo -->
+								<a href="#menu" class="nav-bars">
+									<img src="/images/nav_icon.svg" class="img-responsive" alt="Collapsable Navbar">
+								</a>
+								<a href="/index.html" class="logo">
+									<span class="symbol"><img src="/images/logo.png" alt="Title" /></span><span class="title">spectral lab</span>
+								</a>
+							</div>
+						</header>
+						<!-- Menu -->
+						<nav id="menu">
+							<h2>Menu</h2>
+							<ul>
+								<li><a href="/index.html">Home</a></li>
+								<li><a href="/jesterky/">Ještěrky</a></li>
+								<li><a href="/banany/">Bananas</a></li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<div class="container">
+			<section class="paragraph">
+				<h1>Banana spectral timepase</h1>
+					<p>Lorem Ipsum
+					</p>
+					<form action="/banany/" method="get">
+  <label for="fname">Select measurement:</label>
+  <select name="filenum" id="filenum">
+{% for filename in filenames %}
+{% if filename == filenum %}
+        <option selected="selected" value="{{ filename }}">image #{{ filename }}</option>
+{% else %}
+        <option value="{{ filename }}">image #{{ filename }}</option>
+{% endif %}
+{% endfor %}
+  </select>  <input type="submit" value="View/Update">
+<br/>red:
+<input type="text" class="red-range-slider" name="red_range" value="" />
+<br/>green:
+<input type="text" class="green-range-slider" name="green_range" value="" />
+<br/>blue:
+<input type="text" class="blue-range-slider" name="blue_range" value="" />
+</form>
+
+			</section>
+			<section class ="fit-image">
+				<div class="container">
+				<h1>IMAGE</h1><br>
+						<div class="row">
+						
+						<div class="col-md-12">
+							        <div>
+                <img src="{{ url_for('spectral_demo', filenum = filenum, from_red=from_red, to_red=to_red, from_green=from_green, to_green=to_green, from_blue=from_blue, to_blue=to_blue) }}" class="img-responsive img-fit" id="rgb_image">
+        </div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+		<section class="footer">
+			<footer>
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-8 col-xs-9">
+							<p class="right-color">&copy; Copyright 2016. All rights reserved by <a href="https://themewagon.com/" target="_blank">ThemeWagon</a></p>
+						</div>
+						<div class="col-sm-4 col-xs-3" align="right">
+							<a href="#" id="back-to-top" class="top" >TOP <i class="fa fa-angle-up" aria-hidden="true"></i> </a>
+						</div>
+					</div>
+				</div>
+			</footer>
+		</section>
+
+		<!-- Scripts -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+		<script src="/assets/js/bootstrap.min.js"></script>
+		<script src="/assets/js/jquery.magnific-popup.min.js"></script>
+
+		<script src="/assets/js/script.js"></script>
+
+		<!--Plugin JavaScript file-->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+		
+		<!--  ===== Scroll to Top ====  -->
+		<script>
+			if ($('#back-to-top').length) {
+			    $('#back-to-top').on('click', function (e) {
+			        e.preventDefault();
+			        $('html,body').animate({
+			            scrollTop: 0
+			        }, 700);
+			    });
+			}
+$(".red-range-slider").ionRangeSlider({
+        type: "double",
+        grid: true,
+	from: {{ from_red }},
+	to: {{ to_red}},
+        values: {{ wavelengths }},
+        postfix: " nm"
+    });
+$(".green-range-slider").ionRangeSlider({
+        type: "double",
+        grid: true,
+	from: {{ from_green }},
+	to: {{ to_green }},
+	values: {{ wavelengths }},
+	postfix: " nm"
+    });
+$(".blue-range-slider").ionRangeSlider({
+        type: "double",
+        grid: true,
+	from: {{ from_blue }},
+	to: {{ to_blue }},
+        values: {{ wavelengths }},
+        postfix: " nm"
+    });
+
+// helper function to get an element's exact position
+function getPosition(el) {
+  var xPosition = 0;
+  var yPosition = 0;
+
+  while (el) {
+    if (el.tagName == "BODY") {
+      // deal with browser quirks with body/window/document and page scroll
+      var xScrollPos = el.scrollLeft || document.documentElement.scrollLeft;
+      var yScrollPos = el.scrollTop || document.documentElement.scrollTop;
+
+      xPosition += (el.offsetLeft - xScrollPos + el.clientLeft);
+      yPosition += (el.offsetTop - yScrollPos + el.clientTop);
+    } else {
+      xPosition += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+      yPosition += (el.offsetTop - el.scrollTop + el.clientTop);
+    }
+
+    el = el.offsetParent;
+  }
+  return {
+    x: xPosition,
+    y: yPosition
+  };
+}
+
+function getClickPosition(e) {
+	var xPosition = 512*(e.clientX-getPosition(document.getElementById("rgb_image")).x)/document.getElementById("rgb_image").width;
+  var yPosition = 512*(e.clientY-getPosition(document.getElementById("rgb_image")).y)/document.getElementById("rgb_image").height;
+	window.open("/banany/point_spectrum/filenum={{ filenum }}&x="+Math.round(xPosition)+"&y="+Math.round(yPosition), '_blank');
+}
+
+document.getElementById("rgb_image").addEventListener("click", getClickPosition, false);
+		</script>
+		
+	</body>
+</html>
